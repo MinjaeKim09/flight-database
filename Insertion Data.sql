@@ -9,7 +9,8 @@ INSERT INTO Customer(email, password, name, address_number, address_street, addr
 VALUES
 ('edward@example.com','edward123','Edward Chen','5','Wall St.','New York','NY','+1-212-555-1000','PUSA10001','2032-06-30','USA','1995-04-12'),
 ('aderline@example.com','ade123','Aderline Smith','88','Broadway','New York','NY','+1-917-555-2200','PUSA20002','2031-10-31','USA','1992-09-05'),
-('cass@example.com','cass123','Cassandra Diaz','5','Ocean Blvd','Miami','FL','+1-305-555-3300','PMEX30003','2033-01-15','Mexico','1990-02-20');
+('cass@example.com','cass123','Cassandra Diaz','5','Ocean Blvd','Miami','FL','+1-305-555-3300','PMEX30003','2033-01-15','Mexico','1990-02-20'),
+('mk8400@nyu.edu', '098f6bcd4621d373cade4e832627b4f6', 'Minjae Kim', '606', '170 Tillary St', 'Brooklyn', 'NY', '9714708881', '696942067', '2030-09-01', 'US', '2003-09-01');
 
 INSERT INTO Airline_Staff(username, password, airline_name, first_name, last_name, email, date_of_birth)
 VALUES ('jb_staff1','password','Jet Blue','Jamie','Baker','staff1@jetblue.com','1988-07-07');
