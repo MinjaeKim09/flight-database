@@ -83,7 +83,7 @@ def login():
     """Login page for customers and staff."""
     if request.method == 'POST':
         user_type = request.form.get('user_type')
-        username = sanitize_input(request.form.get('username', ''))
+        username = sanitize_input(request.form.get('username', '').strip())
         password = request.form.get('password', '')
         
         if user_type == 'customer':

@@ -14,7 +14,7 @@ def authenticate_customer(email, password):
         query = """
             SELECT email, name
             FROM Customer
-            WHERE email = %s AND password = %s
+            WHERE LOWER(email) = LOWER(%s) AND password = %s
         """
         
         cur.execute(query, [email, password_hash])
