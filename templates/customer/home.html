@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SkyHigh{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h1 class="fw-bold">Welcome, {{ session.name }}.</h1>
+        <p class="text-secondary">Where would you like to go today?</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('customer_search') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">✈️</div>
+                    <h3 class="card-title text-dark">Book a Flight</h3>
+                    <p class="text-secondary">Find your next destination.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{{ url_for('customer_flights') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">🎫</div>
+                    <h3 class="card-title text-dark">My Trips</h3>
+                    <p class="text-secondary">Manage your upcoming travel.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{{ url_for('customer_review') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">⭐</div>
+                    <h3 class="card-title text-dark">Reviews</h3>
+                    <p class="text-secondary">Share your experiences.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card bg-light border-0" style="background-color: rgba(0,0,0,0.03) !important;">
+            <div class="card-body d-flex justify-content-between align-items-center p-4">
+                <div>
+                    <h5 class="mb-1">Track your spending</h5>
+                    <p class="text-secondary mb-0">See how much you've spent on flights this year.</p>
+                </div>
+                <a href="{{ url_for('customer_flights') }}" class="btn btn-secondary" style="background: white; color: black;">View Activity</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

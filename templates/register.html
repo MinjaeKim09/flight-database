@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Create ID - SkyHigh{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Create Your SkyHigh ID</h2>
+            <p class="text-secondary">Join us to experience seamless travel.</p>
+        </div>
+        
+        <div class="d-flex justify-content-center mb-4">
+            <ul class="nav nav-pills" id="registerTabs" role="tablist" style="background: rgba(118, 118, 128, 0.12); padding: 4px; border-radius: 12px; display: inline-flex;">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="customer-tab" data-bs-toggle="pill" data-bs-target="#customer" type="button" style="border-radius: 8px; padding: 8px 24px; font-size: 14px; font-weight: 500; color: #1d1d1f;">Customer</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="staff-tab" data-bs-toggle="pill" data-bs-target="#staff" type="button" style="border-radius: 8px; padding: 8px 24px; font-size: 14px; font-weight: 500; color: #1d1d1f;">Airline Staff</button>
+                </li>
+            </ul>
+        </div>
+        
+        <style>
+            .nav-pills .nav-link.active {
+                background-color: white;
+                box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            }
+        </style>
+        
+        <div class="tab-content" id="registerTabsContent">
+            <!-- Customer Registration -->
+            <div class="tab-pane fade show active" id="customer" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('register') }}">
+                            <input type="hidden" name="user_type" value="customer">
+                            
+                            <h5 class="mb-3">Account Details</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mb-3 mt-4">Personal Info</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" name="date_of_birth" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" name="phone_number" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label class="form-label">Bldg No.</label>
+                                    <input type="text" class="form-control" name="address_number" required>
+                                </div>
+                                <div class="col-md-9">
+                                    <label class="form-label">Street</label>
+                                    <input type="text" class="form-control" name="address_street" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" name="address_city" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">State</label>
+                                    <input type="text" class="form-control" name="address_state" required>
+                                </div>
+                            </div>
+                            
+                            <h5 class="mb-3 mt-4">Passport</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Passport Number</label>
+                                <input type="text" class="form-control" name="passport_number" required>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Expiration</label>
+                                    <input type="date" class="form-control" name="passport_expiration" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Country of Issue</label>
+                                    <input type="text" class="form-control" name="passport_country" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary w-100 py-2">Create Account</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Staff Registration -->
+            <div class="tab-pane fade" id="staff" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('register') }}">
+                            <input type="hidden" name="user_type" value="staff">
+                            
+                            <h5 class="mb-3">Staff Credentials</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="username" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Airline</label>
+                                <select class="form-select" name="airline_name" required>
+                                    <option value="" disabled selected>Select Airline</option>
+                                    {% for airline in airlines %}
+                                    <option value="{{ airline }}">{{ airline }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <h5 class="mb-3 mt-4">Personal Info</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" name="date_of_birth">
+                            </div>
+                            
+                            <h5 class="mb-3 mt-4">Contact</h5>
+                            <div class="mb-3">
+                                <label class="form-label">Phone Numbers</label>
+                                <input type="text" class="form-control mb-2" name="phone_number" placeholder="Primary Phone">
+                                <input type="text" class="form-control mb-2" name="phone_number" placeholder="Secondary (Optional)">
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary w-100 py-2">Register Staff ID</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

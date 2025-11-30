@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}My Trips - SkyHigh{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h1 class="fw-bold">My Trips</h1>
+        <p class="text-secondary">Upcoming and past journeys.</p>
+    </div>
+    <div class="col-md-6 text-end">
+         <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+            Filter Flights
+        </button>
+    </div>
+</div>
+
+<div class="collapse mb-4" id="filterCollapse">
+    <div class="card card-body">
+        <form method="POST" action="{{ url_for('customer_flights') }}">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" class="form-control" name="start_date">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" class="form-control" name="end_date">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">From</label>
+                    <input type="text" class="form-control" name="departure_city" placeholder="City/Code">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">To</label>
+                    <input type="text" class="form-control" name="arrival_city" placeholder="City/Code">
+                </div>
+            </div>
+            <div class="mt-3 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="future_only" id="future_only" checked>
+                    <label class="form-check-label" for="future_only">Show future flights only</label>
+                </div>
+                <div>
+                    <a href="{{ url_for('customer_flights') }}" class="btn btn-secondary me-2">Reset</a>
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if flights %}
+    <div class="d-flex flex-column gap-3">
+        {% for flight in flights %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-10">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-light text-dark border me-2">{{ flight.airline_name }}</span>
+                            <span class="text-secondary" style="font-size: 14px;">Flight {{ flight.flight_number }}</span>
+                            {% if flight.status == 'on-time' %}
+                                <span class="badge bg-success ms-auto">On Time</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark ms-auto">{{ flight.status }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="fs-3 fw-bold">{{ flight.departure_timestamp.strftime('%H:%M') }}</div>
+                                <div class="text-secondary">{{ flight.departure_airport }}</div>
+                                <div class="text-secondary small">{{ flight.dep_city }}</div>
+                                <div class="text-secondary small">{{ flight.departure_timestamp.strftime('%b %d, %Y') }}</div>
+                            </div>
+                            
+                            <div class="px-4 text-center flex-grow-1">
+                                <div style="border-top: 2px dashed #e5e5e5; position: relative; top: 12px;"></div>
+                                <span style="background: white; padding: 0 10px; position: relative; color: #86868b;">✈</span>
+                                <div class="text-secondary small mt-1">
+                                    Duration: {{ ((flight.arrival_timestamp - flight.departure_timestamp).total_seconds() / 3600)|round(1) }}h
+                                </div>
+                            </div>
+                            
+                            <div class="text-end">
+                                <div class="fs-3 fw-bold">{{ flight.arrival_timestamp.strftime('%H:%M') }}</div>
+                                <div class="text-secondary">{{ flight.arrival_airport }}</div>
+                                <div class="text-secondary small">{{ flight.arr_city }}</div>
+                                <div class="text-secondary small">{{ flight.arrival_timestamp.strftime('%b %d, %Y') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 border-start text-center">
+                         <div class="text-secondary small mb-1">Ticket ID</div>
+                         <div class="font-monospace fw-bold mb-3">{{ flight.ticket_id }}</div>
+                         <div class="text-secondary small mb-1">Price</div>
+                         <div class="fw-bold">${{ "%.2f"|format(flight.base_price) }}</div>
+                         <div class="text-secondary small mt-3">Purchased<br>{{ flight.purchase_timestamp.strftime('%Y-%m-%d') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <h3 class="text-secondary">No trips found.</h3>
+        <p class="text-secondary mb-4">Ready to take off?</p>
+        <a href="{{ url_for('customer_search') }}" class="btn btn-primary">Book a Flight</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to SkyHigh{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1 class="hero-title">Travel, Reimagined.</h1>
+    <p class="hero-subtitle" style="margin-bottom: 0.5rem;">Experience the world with the most seamless booking platform ever built.</p>
+    <p class="text-secondary mb-4">Made by Adit Mandal and Minjae Kim</p>
+    
+    <div class="d-flex justify-content-center gap-3">
+        {% if not session.username %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary" style="padding: 12px 24px; font-size: 17px;">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-secondary" style="padding: 12px 24px; font-size: 17px;">Sign In</a>
+        {% else %}
+            {% if session.user_type == 'customer' %}
+                <a href="{{ url_for('customer_search') }}" class="btn btn-primary" style="padding: 12px 24px; font-size: 17px;">Book a Flight</a>
+            {% else %}
+                <a href="{{ url_for('staff_home') }}" class="btn btn-primary" style="padding: 12px 24px; font-size: 17px;">Go to Dashboard</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mt-5 justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="mb-3">Public Flight Status</h3>
+                <p class="text-secondary mb-4">Check the status of any flight in real-time.</p>
+                
+                <form action="{{ url_for('public_search') }}" method="POST" class="d-flex gap-2 justify-content-center">
+                    <input type="text" name="flight_num" class="form-control" placeholder="Flight Number" style="max-width: 200px;" required>
+                    <input type="date" name="dep_date" class="form-control" style="max-width: 200px;" required>
+                    <button type="submit" class="btn btn-primary">Check Status</button>
+                </form>
+                
+                {% if flights %}
+                <div class="mt-4 text-start">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Flight</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for flight in flights %}
+                            <tr>
+                                <td>
+                                    <span class="fw-bold">{{ flight.airline_name }}</span><br>
+                                    <span class="text-secondary">{{ flight.flight_number }}</span>
+                                </td>
+                                <td>
+                                    {{ flight.departure_timestamp }}<br>
+                                    <span class="text-secondary">{{ flight.departure_airport }}</span>
+                                </td>
+                                <td>
+                                    {{ flight.arrival_timestamp }}<br>
+                                    <span class="text-secondary">{{ flight.arrival_airport }}</span>
+                                </td>
+                                <td>
+                                    {% if flight.status == 'on-time' %}
+                                        <span class="text-success">On Time</span>
+                                    {% elif flight.status == 'delayed' %}
+                                        <span class="text-danger">Delayed</span>
+                                    {% else %}
+                                        {{ flight.status }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

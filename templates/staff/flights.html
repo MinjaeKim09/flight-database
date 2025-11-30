@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}View Flights - Air Ticket Reservation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>View Flights - {{ session.airline_name }}</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Filter Flights</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('staff_flights') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" name="start_date">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" name="end_date">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Departure City/Airport</label>
+                            <input type="text" class="form-control" name="departure_city" placeholder="City or Airport code">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Arrival City/Airport</label>
+                            <input type="text" class="form-control" name="arrival_city" placeholder="City or Airport code">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="future_only" id="future_only" checked>
+                            <label class="form-check-label" for="future_only">Show future flights only (next 30 days)</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ url_for('staff_flights') }}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+        </div>
+        
+        {% if flights %}
+        <div class="card">
+            <div class="card-header">
+                <h4>Flights</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Flight Number</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Seats</th>
+                                <th>Tickets Sold</th>
+                                <th>Customers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for flight in flights %}
+                            <tr>
+                                <td>{{ flight.flight_number }}</td>
+                                <td>{{ flight.departure_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ flight.arrival_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ flight.departure_airport }} ({{ flight.dep_city }})</td>
+                                <td>{{ flight.arrival_airport }} ({{ flight.arr_city }})</td>
+                                <td>${{ "%.2f"|format(flight.base_price) }}</td>
+                                <td><span class="badge bg-{{ 'success' if flight.status == 'on-time' else 'warning' }}">{{ flight.status }}</span></td>
+                                <td>{{ flight.seat_no }}</td>
+                                <td>{{ flight.tickets_sold }}</td>
+                                <td>
+                                    {% set key = flight.airline_name + '_' + flight.flight_number + '_' + flight.departure_timestamp|string %}
+                                    {% if key in flight_customers and flight_customers[key] %}
+                                        <button class="btn btn-sm btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#customers{{ loop.index }}">
+                                            View ({{ flight_customers[key]|length }})
+                                        </button>
+                                    {% else %}
+                                        <span class="text-muted">None</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% if key in flight_customers and flight_customers[key] %}
+                            <tr>
+                                <td colspan="10">
+                                    <div class="collapse" id="customers{{ loop.index }}">
+                                        <div class="card card-body">
+                                            <h6>Customers:</h6>
+                                            <ul>
+                                                {% for customer in flight_customers[key] %}
+                                                <li>{{ customer.name }} ({{ customer.email }}) - Ticket ID: {{ customer.ticket_id }} - Purchased: {{ customer.purchase_timestamp.strftime('%Y-%m-%d %H:%M') }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            No flights found.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

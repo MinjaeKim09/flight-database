@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Sales Reports - Air Ticket Reservation{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Sales Reports - {{ session.airline_name }}</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Select Report Period</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('staff_reports') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Period</label>
+                            <select class="form-select" name="period" id="period">
+                                <option value="last_month">Last Month</option>
+                                <option value="last_year">Last Year</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" id="start_date_div" style="display:none;">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" name="start_date" id="start_date">
+                        </div>
+                        <div class="col-md-4" id="end_date_div" style="display:none;">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" name="end_date" id="end_date">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if report %}
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Total Tickets Sold</h5>
+                        <h2>{{ report.total_tickets }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Total Revenue</h5>
+                        <h2>${{ "%.2f"|format(report.total_revenue) }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if report.monthly_data %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Monthly Breakdown</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Tickets Sold</th>
+                                <th>Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for month in report.monthly_data %}
+                            <tr>
+                                <td>{{ month.month_display }}</td>
+                                <td>{{ month.ticket_count }}</td>
+                                <td>${{ "%.2f"|format(month.revenue) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4>Monthly Sales Chart</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" height="100"></canvas>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.getElementById('period').addEventListener('change', function() {
+    if (this.value === 'custom') {
+        document.getElementById('start_date_div').style.display = 'block';
+        document.getElementById('end_date_div').style.display = 'block';
+    } else {
+        document.getElementById('start_date_div').style.display = 'none';
+        document.getElementById('end_date_div').style.display = 'none';
+    }
+});
+
+{% if report and report.monthly_data %}
+const ctx = document.getElementById('salesChart').getContext('2d');
+const salesChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for month in report.monthly_data %}'{{ month.month_display }}'{% if not loop.last %},{% endif %}{% endfor %}],
+        datasets: [{
+            label: 'Revenue ($)',
+            data: [{% for month in report.monthly_data %}{{ month.revenue }}{% if not loop.last %},{% endif %}{% endfor %}],
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+{% endif %}
+</script>
+{% endblock %}
+

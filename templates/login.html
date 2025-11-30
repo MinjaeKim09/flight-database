@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - SkyHigh{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Sign In</h2>
+            <p class="text-secondary">Access your SkyHigh account.</p>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-4">
+                        <select class="form-select" name="user_type" required>
+                            <option value="" disabled selected>Select Account Type</option>
+                            <option value="customer">Customer</option>
+                            <option value="staff">Airline Staff</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <input type="text" class="form-control" name="username" placeholder="Email or Username" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" style="padding: 12px; font-size: 16px;">Sign In</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <p class="text-secondary" style="font-size: 14px;">New here? <a href="{{ url_for('register') }}" style="color: var(--accent-color); text-decoration: none;">Create an ID</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

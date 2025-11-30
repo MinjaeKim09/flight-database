@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Add Airplane - Air Ticket Reservation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h1>Add New Airplane</h1>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Airplane Information</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('staff_add_airplane') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Airplane ID (UID) *</label>
+                        <input type="text" class="form-control" name="uid" required>
+                        <small class="form-text text-muted">Unique identifier within the airline</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Number of Seats *</label>
+                        <input type="number" class="form-control" name="seat_no" min="1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Manufacturer *</label>
+                        <input type="text" class="form-control" name="manufacturer" required>
+                        <small class="form-text text-muted">e.g., Airbus, Boeing</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Age (years) *</label>
+                        <input type="number" class="form-control" name="age" min="0" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Add Airplane</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <h2>All Airplanes - {{ session.airline_name }}</h2>
+        
+        {% if airplanes %}
+        <div class="card">
+            <div class="card-header">
+                <h4>Airplane List</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>UID</th>
+                                <th>Seats</th>
+                                <th>Manufacturer</th>
+                                <th>Age</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for airplane in airplanes %}
+                            <tr>
+                                <td>{{ airplane.uid }}</td>
+                                <td>{{ airplane.seat_no }}</td>
+                                <td>{{ airplane.manufacturer }}</td>
+                                <td>{{ airplane.age }} years</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            No airplanes found.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

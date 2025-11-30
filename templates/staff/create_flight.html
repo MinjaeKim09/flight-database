@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Create Flight - Air Ticket Reservation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h1>Create New Flight</h1>
+        
+        <div class="card">
+            <div class="card-header">
+                <h4>Flight Information</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('staff_create_flight') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Flight Number *</label>
+                            <input type="text" class="form-control" name="flight_number" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Airplane *</label>
+                            <select class="form-select" name="uid" required>
+                                <option value="">Select airplane</option>
+                                {% for airplane in airplanes %}
+                                <option value="{{ airplane.uid }}">{{ airplane.uid }} ({{ airplane.manufacturer }}, {{ airplane.seat_no }} seats)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Departure Airport *</label>
+                            <select class="form-select" name="departure_airport" required>
+                                <option value="">Select airport</option>
+                                {% for airport in airports %}
+                                <option value="{{ airport.code }}">{{ airport.code }} - {{ airport.city }}, {{ airport.country }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Arrival Airport *</label>
+                            <select class="form-select" name="arrival_airport" required>
+                                <option value="">Select airport</option>
+                                {% for airport in airports %}
+                                <option value="{{ airport.code }}">{{ airport.code }} - {{ airport.city }}, {{ airport.country }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Departure Date & Time *</label>
+                            <input type="datetime-local" class="form-control" name="departure_timestamp" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Arrival Date & Time *</label>
+                            <input type="datetime-local" class="form-control" name="arrival_timestamp" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Base Price *</label>
+                            <input type="number" class="form-control" name="base_price" step="0.01" min="0" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Status *</label>
+                            <select class="form-select" name="status" required>
+                                <option value="on-time">On-time</option>
+                                <option value="delayed">Delayed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Create Flight</button>
+                    <a href="{{ url_for('staff_flights') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

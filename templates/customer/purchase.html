@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - SkyHigh{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <h2 class="fw-bold mb-4">Confirm Booking</h2>
+        
+        <div class="row g-4">
+            <!-- Flight Summary -->
+            <div class="col-md-5">
+                <div class="card border-0 shadow-sm h-100" style="background-color: #F5F5F7;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4 text-secondary">Flight Summary</h5>
+                        
+                        <div class="mb-4">
+                            <h3 class="fw-bold">{{ flight.airline_name }}</h3>
+                            <p class="text-secondary mb-0">Flight {{ flight.flight_number }}</p>
+                        </div>
+                        
+                        <div class="position-relative py-3 mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <div class="fs-4 fw-bold">{{ flight.departure_timestamp.strftime('%H:%M') }}</div>
+                                    <div class="text-secondary">{{ flight.departure_airport }}</div>
+                                </div>
+                                <div class="text-center text-secondary">
+                                    ✈
+                                </div>
+                                <div class="text-end">
+                                    <div class="fs-4 fw-bold">{{ flight.arrival_timestamp.strftime('%H:%M') }}</div>
+                                    <div class="text-secondary">{{ flight.arrival_airport }}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between text-secondary small">
+                                <div>{{ flight.dep_city }}</div>
+                                <div>{{ flight.arr_city }}</div>
+                            </div>
+                             <div class="mt-2 text-center text-secondary small">
+                                {{ flight.departure_timestamp.strftime('%A, %b %d, %Y') }}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <span class="text-secondary">Total</span>
+                            <span class="fs-2 fw-bold">${{ "%.2f"|format(flight.base_price) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Form -->
+            <div class="col-md-7">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-5">
+                        <h4 class="fw-bold mb-4">Payment Details</h4>
+                        
+                        <form method="POST" action="{{ url_for('customer_purchase') }}">
+                            <input type="hidden" name="airline_name" value="{{ flight.airline_name }}">
+                            <input type="hidden" name="flight_number" value="{{ flight.flight_number }}">
+                            <input type="hidden" name="departure_timestamp" value="{{ flight.departure_timestamp }}">
+                            
+                            <div class="mb-4">
+                                <label class="form-label text-secondary">Card Type</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="card_type" value="credit" id="credit" checked>
+                                        <label class="form-check-label" for="credit">Credit Card</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="card_type" value="debit" id="debit">
+                                        <label class="form-check-label" for="debit">Debit Card</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label text-secondary">Cardholder Name</label>
+                                <input type="text" class="form-control form-control-lg" name="card_name" placeholder="John Doe" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label text-secondary">Card Number</label>
+                                <input type="text" class="form-control form-control-lg" name="card_number" placeholder="0000 0000 0000 0000" required maxlength="25">
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-6">
+                                    <label class="form-label text-secondary">Expiration</label>
+                                    <input type="text" class="form-control form-control-lg" name="card_expiration" placeholder="MM/YY" required maxlength="5">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label text-secondary">CVV</label>
+                                    <input type="text" class="form-control form-control-lg" placeholder="123" maxlength="4">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100 py-3" style="font-size: 18px;">Pay ${{ "%.0f"|format(flight.base_price) }}</button>
+                            <div class="text-center mt-3">
+                                <a href="{{ url_for('customer_search') }}" class="text-secondary text-decoration-none">Cancel Transaction</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

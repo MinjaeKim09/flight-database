@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Flight Ratings - Air Ticket Reservation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Flight Ratings - {{ session.airline_name }}</h1>
+        
+        {% if flights %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>All Flights with Ratings</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Flight Number</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Average Rating</th>
+                                <th>Number of Reviews</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for flight in flights %}
+                            <tr>
+                                <td>{{ flight.flight_number }}</td>
+                                <td>{{ flight.departure_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ flight.arrival_airport }} ({{ flight.arr_city }})</td>
+                                <td>{{ flight.departure_airport }} ({{ flight.dep_city }})</td>
+                                <td>{{ flight.arrival_airport }} ({{ flight.arr_city }})</td>
+                                <td>
+                                    {% if flight.avg_rating > 0 %}
+                                        <span class="badge bg-success">{{ "%.1f"|format(flight.avg_rating) }}/5.0</span>
+                                    {% else %}
+                                        <span class="text-muted">No ratings</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ flight.review_count }}</td>
+                                <td>
+                                    {% if flight.review_count > 0 %}
+                                    <a href="{{ url_for('staff_ratings', flight_number=flight.flight_number, departure_timestamp=flight.departure_timestamp) }}" class="btn btn-sm btn-info">View Reviews</a>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if reviews %}
+        <div class="card">
+            <div class="card-header">
+                <h4>Reviews for Flight {{ selected_flight_number }}</h4>
+            </div>
+            <div class="card-body">
+                {% for review in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>{{ review.name }} ({{ review.email }})</h5>
+                        <p>
+                            <strong>Rating:</strong> 
+                            {% for i in range(1, 6) %}
+                                {% if i <= review.rate %}
+                                    <span class="text-warning">★</span>
+                                {% else %}
+                                    <span class="text-muted">★</span>
+                                {% endif %}
+                            {% endfor %}
+                            {{ review.rate }}/5
+                        </p>
+                        {% if review.comment %}
+                        <p><strong>Comment:</strong> {{ review.comment }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

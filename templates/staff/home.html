@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Dashboard - SkyHigh{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h1 class="fw-bold">{{ session.airline_name }} Dashboard</h1>
+        <p class="text-secondary">Welcome back, {{ session.name }}. Manage your airline's operations.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('staff_flights') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">🛫</div>
+                    <h3 class="card-title text-dark">View Flights</h3>
+                    <p class="text-secondary">Manage schedules and passengers.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{{ url_for('staff_create_flight') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">➕</div>
+                    <h3 class="card-title text-dark">Create Flight</h3>
+                    <p class="text-secondary">Schedule a new route.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{{ url_for('staff_change_status') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">⏱️</div>
+                    <h3 class="card-title text-dark">Update Status</h3>
+                    <p class="text-secondary">Delays, cancellations, and arrivals.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('staff_add_airplane') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">✈️</div>
+                    <h3 class="card-title text-dark">Fleet Management</h3>
+                    <p class="text-secondary">Add new aircraft to the system.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('staff_ratings') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">⭐</div>
+                    <h3 class="card-title text-dark">Ratings</h3>
+                    <p class="text-secondary">See what customers are saying.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{{ url_for('staff_reports') }}" class="text-decoration-none">
+            <div class="card h-100">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3" style="font-size: 40px;">📊</div>
+                    <h3 class="card-title text-dark">Reports</h3>
+                    <p class="text-secondary">Analyze sales and performance.</p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}
