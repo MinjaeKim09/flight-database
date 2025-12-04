@@ -48,7 +48,7 @@ def main():
         drop_all(cur)
         
         run_sql_file(cur, "Create Tables.sql")
-        run_sql_file(cur, "Insert Final.sql")
+        run_sql_file(cur, "Insertion Data.sql")
         
         conn.commit()
         print("Database reset and populated successfully!")

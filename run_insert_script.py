@@ -42,7 +42,7 @@ def main():
         cur = conn.cursor()
 
         # Read SQL file
-        file_path = "Insert Final.sql"
+        file_path = "Insertion Data.sql"
         print(f"Reading {file_path}...")
         with open(file_path, "r") as f:
             sql_content = f.read()
